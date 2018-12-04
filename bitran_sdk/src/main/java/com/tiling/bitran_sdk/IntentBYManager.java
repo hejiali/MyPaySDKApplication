@@ -27,8 +27,9 @@ import com.tiling.bitran_sdk.dialog.PayDialog;
  */
 public class IntentBYManager {
 
-    public static final int ACTIVITY_START_LY_APP = 1003;
-    public static final String LY_PAY ="ly_pay";
+    private static final int ACTIVITY_START_LY_APP = 1003;
+    private static final String LY_PAY ="ly_pay";
+    private PayDialog mPayDialog;
 
     private static IntentBYManager mIntentBYManager;
 
@@ -49,32 +50,6 @@ public class IntentBYManager {
     /**
      * 仿支付宝显示加载dialog
      */
-
-
-    //加载框变量
-    private ProgressDialog progressDialog;
-    private void showProgressDialog(Activity activity, String mStrOrder) {
-        if (activity == null) {
-            Log.d("hjl", "activity == null");
-            return ;
-        }
-
-
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(activity);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        }
-        progressDialog.setMessage("跳转支付中...");    //设置内容
-        progressDialog.setCancelable(false);//点击屏幕和按返回键都不能取消加载框
-        if (!activity.isFinishing()) {
-            progressDialog.show();
-        }
-
-
-
-    }
-
-    private PayDialog mPayDialog;
     private void showPayDialog(final Activity activity, final String mStrOrder) {
         if (activity == null) {
             Log.d("hjl", "activity == null");
@@ -134,7 +109,7 @@ public class IntentBYManager {
 
     // 去支付
     public void startLaoYuanAppPay(final Activity activity, String mStrOrder) {
-        mStrOrder = "{\"tradeAmount\":1000,\"charset\":\"utf-8\",\"orderNo\":\"20181203201029154383902998622\",\"openId\":\"20181201001\",\"callBack\":\"http://excwww.houge666.com/api/v1/trade/recharge\",\"sign\":\"09e33fde420eeff4b1c6ed24d0d5df68\",\"version\":\"1.0\",\"timestamp\":1543839029988}";
+
         String packageName = "com.laoyuan.bitcoinwallet";
 
         if (checkPackInfo(activity, packageName)) {
@@ -180,10 +155,6 @@ public class IntentBYManager {
     }
 
     public void destroy(){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
         if (mPayDialog != null){
             mPayDialog.dismiss();
             mPayDialog = null;
