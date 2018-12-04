@@ -32,8 +32,9 @@ public class MainActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.btn_bitmap_compress:
                 // 去支付
+                String mStrOrder = "你申请的订单号";
                 mIntentBYManager = IntentBYManager.getInstance();
-                mIntentBYManager.startLaoYuanAppPay(MainActivity.this,"");
+                mIntentBYManager.startLaoYuanAppPay(MainActivity.this,mStrOrder);
                 break;
             case R.id.btn_bitmap_factory:
                 // 去充值
