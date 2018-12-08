@@ -18,7 +18,7 @@ Add it in your root build.gradle at the end of repositories:
   
   
  	 dependencies {
-	        implementation 'com.github.hejiali:MyPaySDKApplication:v1.0'
+	        implementation 'com.github.hejiali:MyPaySDKApplication:v1.2'
 		}
 		
 		
