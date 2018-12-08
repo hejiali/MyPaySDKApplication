@@ -1,7 +1,7 @@
 package com.tiling.bitran_sdk;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,12 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
-
-import com.tiling.bitran_sdk.dialog.LoadingDialog;
-import com.tiling.bitran_sdk.dialog.PayDialog;
 
 /**
  * @author hjl
@@ -27,32 +22,14 @@ import com.tiling.bitran_sdk.dialog.PayDialog;
  */
 public class IntentBYManager {
 
-    private static final int ACTIVITY_START_LY_APP = 1003;
-    private static final String LY_PAY ="ly_pay";
-    private PayDialog mPayDialog;
-
-    private static IntentBYManager mIntentBYManager;
-
-    private IntentBYManager(){}
-
-    public static IntentBYManager getInstance(){
-
-        if (mIntentBYManager == null){
-            synchronized (IntentBYManager.class) {
-                if (mIntentBYManager == null){
-                    mIntentBYManager = new IntentBYManager();
-                }
-            }
-        }
-        return mIntentBYManager;
-    }
+    public static final int ACTIVITY_START_LY_APP = 6001;
+    private static PayDialog mPayDialog;
 
     /**
      * 仿支付宝显示加载dialog
      */
-    private void showPayDialog(final Activity activity, final String mStrOrder) {
+    private static void showPayDialog(final Activity activity, final String mStrOrder) {
         if (activity == null) {
-            Log.d("hjl", "activity == null");
             return ;
         }
 
@@ -69,20 +46,19 @@ public class IntentBYManager {
             @Override
             public void run() {
                 //取消加载框
-                IntentBYManager.this.dismissProgressDialog();
+                dismissProgressDialog();
                 Intent intent1 = new Intent();
-                intent1.setAction("com.example.intent.action.LAOYUAN_PAY_ACTION");
-                intent1.addCategory("com.example.intent.category.LAOYUAN_PAY_CATEGORY");
+                intent1.setAction(activity.getString(R.string.ly_pay_action));
+                intent1.addCategory(activity.getString(R.string.ly_pay_category));
                 Bundle bundle = new Bundle();
-                intent1.putExtra("flag", LY_PAY);
-                intent1.putExtra("paramsJson", mStrOrder);
+                intent1.putExtra(activity.getString(R.string.params_json), mStrOrder);
                 intent1.putExtras(bundle);
                 activity.startActivityForResult(intent1, ACTIVITY_START_LY_APP);
             }
         }, 2000);
     }
 
-    private void dismissProgressDialog() {
+    private static void dismissProgressDialog() {
         if (mPayDialog != null){
             if (mPayDialog.isShowing()) {
                 mPayDialog.dismiss();
@@ -97,7 +73,7 @@ public class IntentBYManager {
      * @param packageName
      * @return
      */
-    private boolean checkPackInfo(Context context, String packageName) {
+    private static boolean checkPackInfo(Context context, String packageName) {
         PackageInfo packageInfo = null;
         try {
             packageInfo = context.getPackageManager().getPackageInfo(packageName, 0);
@@ -107,26 +83,29 @@ public class IntentBYManager {
         return packageInfo != null;
     }
 
-    // 去支付
-    public void startLaoYuanAppPay(final Activity activity, String mStrOrder) {
+    public static void startLaoYuanAppPay(final Fragment fragment, String mStrOrder) {
+        startLaoYuanAppPay(fragment.getActivity(), mStrOrder);
+    }
 
-        String packageName = "com.laoyuan.bitcoinwallet";
+    // 去支付
+    public static void startLaoYuanAppPay(final Activity activity, String mStrOrder) {
+
+        String packageName = activity.getString(R.string.package_name);
 
         if (checkPackInfo(activity, packageName)) {
-       //     showProgressDialog(activity,mStrOrder);
             showPayDialog(activity,mStrOrder);
 
         } else {
             new AlertDialog.Builder(activity)
-                    .setTitle("提示")
-                    .setMessage("你还未下载Bitran Pay，是否立即去下载？")
-                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.tip)
+                    .setMessage(activity.getString(R.string.has_not_loading_ly))
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
                     })
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -137,24 +116,17 @@ public class IntentBYManager {
         }
     }
 
-
-    private void startLaoYuanPay(String mStrOrder) {
-
-
-
-    }
-
     //这里是进入应用商店，下载指定APP的方法。
-    private void goToMarket(Activity activity) {
-        Uri uri = Uri.parse("https://lybwww.houge666.com/upload/lyb-ui/20181129/8f1e931f-8fd6-4cd7-862d-4987f3c8b89d.apk");
+    private static void goToMarket(Context context) {
+        Uri uri = Uri.parse(context.getString(R.string.load_apk_url));
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
         try {
-            activity.startActivity(goToMarket);
+            context.startActivity(goToMarket);
         } catch (Exception e) {
         }
     }
 
-    public void destroy(){
+    public static void destroy(){
         if (mPayDialog != null){
             mPayDialog.dismiss();
             mPayDialog = null;

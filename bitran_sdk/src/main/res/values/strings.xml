@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">bitran_sdk</string>
+    <string name="load_apk_url">https://lybwww.houge666.com/lyb/download.html</string>
+    <string name="package_name">com.laoyuan.bitcoinwallet</string>
+    <string name="ly_pay_action">com.example.intent.action.LAOYUAN_PAY_ACTION</string>
+    <string name="ly_pay_category">com.example.intent.category.LAOYUAN_PAY_CATEGORY</string>
+    <string name="params_json">paramsJson</string>
+    <string name="tip">提示</string>
+    <string name="has_not_loading_ly">你还未下载Bitran Pay，是否立即去下载？</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
 </resources>

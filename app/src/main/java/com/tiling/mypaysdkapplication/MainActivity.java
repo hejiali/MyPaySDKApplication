@@ -15,10 +15,6 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.btn_bitmap_compress)
     Button mBtnBitmapCompress;
-    @BindView(R.id.btn_bitmap_factory)
-    Button mBtnBitmapFactory;
-
-    private IntentBYManager mIntentBYManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,28 +23,21 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.btn_bitmap_compress, R.id.btn_bitmap_factory})
+    @OnClick({R.id.btn_bitmap_compress})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_bitmap_compress:
                 // 去支付
                 String mStrOrder = "你申请的订单号";
-                mIntentBYManager = IntentBYManager.getInstance();
-                mIntentBYManager.startLaoYuanAppPay(MainActivity.this,mStrOrder);
+                IntentBYManager.startLaoYuanAppPay(MainActivity.this,mStrOrder);
                 break;
-            case R.id.btn_bitmap_factory:
-                // 去充值
 
-                break;
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mIntentBYManager!=null){
-            mIntentBYManager.destroy();
-        }
-
+        IntentBYManager.destroy();
     }
 }
