@@ -20,3 +20,18 @@ Add it in your root build.gradle at the end of repositories:
  	 dependencies {
 	        implementation 'com.github.hejiali:MyPaySDKApplication:v1.0'
 		}
+		
+		
+ Step 3. activity or fragmnet use
+ 
+ 		
+	String mStrOrder = "你申请的订单号";
+        IntentBYManager.startLaoYuanAppPay(MainActivity.this,mStrOrder);
+		
+Step 4. final
+
+	@Override
+        protected void onDestroy() {
+           super.onDestroy();
+            IntentBYManager.destroy();
+       }
